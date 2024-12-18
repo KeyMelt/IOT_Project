@@ -1,0 +1,40 @@
+# Arduino build files
+*.ino.*
+*.cpp.*
+*.h.*
+*.elf
+*.eeprom
+*.hex
+*.bin
+*.o
+*.d
+*.a
+
+# Arduino IDE configuration files
+.idea/
+.vscode/
+*.vcxproj
+*.launch
+*.pdb
+*.opendb
+*.db
+*.log
+*.bak
+
+# Proteus simulation files (if any)
+*.dsn
+*.chk
+*.bak
+*.lib
+
+# Libraries
+/libraries/
+
+# System files (macOS, Windows)
+.DS_Store
+Thumbs.db
+
+# Environment-specific files
+*.user
+*.userprefs
+
