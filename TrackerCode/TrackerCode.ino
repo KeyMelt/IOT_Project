@@ -13,6 +13,7 @@ TinyGPSPlus gps;
 
 // SoftwareSerial for VGPS
 SoftwareSerial gpsSerial(2, 3); // RX, TX for SoftwareSerial (VGPS TX to pin 2)
+SoftwareSerial debugSerial(10, 11);
 
 const int potX = A0; // X-axis potentiometer connected to A0
 const int potY = A1; // Y-axis potentiometer connected to A1
@@ -45,16 +46,22 @@ void handleGPS(TinyGPSPlus &gps)
 
         Blynk.virtualWrite(V0, latitude);
         Blynk.virtualWrite(V1, longitude);
+
+        debugSerial.print("Latitude = ");
+        debugSerial.print(latitude, 6);
+        debugSerial.print(" Longitude = ");
+        debugSerial.println(longitude, 6);
     }
     else
     {
-        Serial.println("GPS signal not valid");
+        debugSerial.println("GPS signal not valid");
     }
 }
 
 void setup()
 {
     gpsSerial.begin(9600);
+    debugSerial.begin(9600); // Initialize debugging serial
     Serial.begin(9600);
     Blynk.config(Serial, auth);
     delay(2000);
