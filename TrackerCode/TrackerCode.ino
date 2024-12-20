@@ -35,6 +35,13 @@ void handleAccelerometer()
     Blynk.virtualWrite(V2, accelX);
     Blynk.virtualWrite(V3, accelY);
     Blynk.virtualWrite(V4, accelZ);
+
+    debugSerial.print("Accel X = ");
+    debugSerial.print(accelX, 2);
+    debugSerial.print(" Accel Y = ");
+    debugSerial.print(accelY, 2);
+    debugSerial.print(" Accel Z = ");
+    debugSerial.println(accelZ, 2);
 }
 
 void handleGPS(TinyGPSPlus &gps)
