@@ -1,92 +1,67 @@
-#define BLYNK_TEMPLATE_ID "TMPL2_q8H_bJi"
-#define BLYNK_TEMPLATE_NAME "AssetTracker"
-#define BLYNK_AUTH_TOKEN "OkBHIdVkFTnC3pwCIv5Vs7oOYrdeuC-t"
-
-#include <SoftwareSerial.h>
-#include <TinyGPS++.h>
-#include <BlynkSimpleStream.h>
-
-// Blynk authentication token
-char auth[] = BLYNK_AUTH_TOKEN;
-
-TinyGPSPlus gps;
-
-// SoftwareSerial for VGPS
-SoftwareSerial gpsSerial(2, 3); // RX, TX for SoftwareSerial (VGPS TX to pin 2)
-SoftwareSerial debugSerial(10, 11);
-
 const int potX = A0; // X-axis potentiometer connected to A0
 const int potY = A1; // Y-axis potentiometer connected to A1
 const int potZ = A2; // Z-axis potentiometer connected to A2
 
-const int outputMin = -10; // Minimum accelerometer value
-const int outputMax = 10;  // Maximum accelerometer value
+const int ledPin = 9; // LED to indicate an accident
+
+const int outputMin = -10;           // Minimum accelerometer value
+const int outputMax = 10;            // Maximum accelerometer value
+const float accidentThreshold = 7.0; // Threshold for detecting an accident
+
+// SoftwareSerial for debugging (virtual terminal)
+#include <SoftwareSerial.h>
+SoftwareSerial debugSerial(10, 11); // RX, TX for debugging
+
+void setup()
+{
+    // Initialize debugging serial
+    debugSerial.begin(9600);
+
+    // Initialize LED pin
+    pinMode(ledPin, OUTPUT);
+    digitalWrite(ledPin, LOW);
+
+    // Debug message
+    debugSerial.println("Standalone Accident Detection Test...");
+}
 
 void handleAccelerometer()
 {
+    // Read analog values from the potentiometers
     int rawX = analogRead(potX);
     int rawY = analogRead(potY);
     int rawZ = analogRead(potZ);
 
+    // Map raw values (0-1023) to accelerometer range (-10 to 10)
     float accelX = map(rawX, 0, 1023, outputMin * 100, outputMax * 100) / 100.0;
     float accelY = map(rawY, 0, 1023, outputMin * 100, outputMax * 100) / 100.0;
     float accelZ = map(rawZ, 0, 1023, outputMin * 100, outputMax * 100) / 100.0;
 
-    Blynk.virtualWrite(V2, accelX);
-    Blynk.virtualWrite(V3, accelY);
-    Blynk.virtualWrite(V4, accelZ);
-
+    // Print accelerometer data to the debugging terminal
     debugSerial.print("Accel X = ");
-    debugSerial.print(accelX, 2);
+    debugSerial.print(accelX, 2); // Limit to 2 decimal places
     debugSerial.print(" Accel Y = ");
     debugSerial.print(accelY, 2);
     debugSerial.print(" Accel Z = ");
     debugSerial.println(accelZ, 2);
-}
 
-void handleGPS(TinyGPSPlus &gps)
-{
-    if (gps.location.isValid())
+    // Check for accident condition
+    if (abs(accelX) > accidentThreshold || abs(accelY) > accidentThreshold || abs(accelZ) > accidentThreshold)
     {
-        float latitude = gps.location.lat();
-        float longitude = gps.location.lng();
-
-        Blynk.virtualWrite(V0, latitude);
-        Blynk.virtualWrite(V1, longitude);
-
-        debugSerial.print("Latitude = ");
-        debugSerial.print(latitude, 6);
-        debugSerial.print(" Longitude = ");
-        debugSerial.println(longitude, 6);
+        debugSerial.println("Accident detected!");
+        digitalWrite(ledPin, HIGH); // Turn on LED
     }
     else
     {
-        debugSerial.println("GPS signal not valid");
+        digitalWrite(ledPin, LOW); // Turn off LED
+        debugSerial.println("Normal conditions");
     }
-}
-
-void setup()
-{
-    gpsSerial.begin(9600);
-    debugSerial.begin(9600); // Initialize debugging serial
-    Serial.begin(9600);
-    Blynk.config(Serial, auth);
-    delay(2000);
 }
 
 void loop()
 {
-    Blynk.run();
-
-    while (gpsSerial.available() > 0)
-    {
-        char c = gpsSerial.read();
-        if (gps.encode(c))
-        {
-            handleGPS(gps);
-        }
-    }
-
+    // Handle accelerometer data
     handleAccelerometer();
-    delay(100);
+
+    delay(500); // Short delay for stability
 }
