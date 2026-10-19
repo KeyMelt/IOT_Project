@@ -1,6 +1,5 @@
-#define BLYNK_TEMPLATE_ID "TMPL2_q8H_bJi"
-#define BLYNK_TEMPLATE_NAME "AssetTracker"
-#define BLYNK_AUTH_TOKEN "OkBHIdVkFTnC3pwCIv5Vs7oOYrdeuC-t"
+#include "secrets.h"
+#include "accident_logic.h"
 
 #include <SoftwareSerial.h>
 #include <TinyGPS++.h>
@@ -38,10 +37,9 @@ void handleAccelerometer()
     int rawY = analogRead(potY);
     int rawZ = analogRead(potZ);
 
-    // Map raw values (0-1023) to accelerometer range (-10 to 10)
-    float accelX = map(rawX, 0, 1023, outputMin * 100, outputMax * 100) / 100.0;
-    float accelY = map(rawY, 0, 1023, outputMin * 100, outputMax * 100) / 100.0;
-    float accelZ = map(rawZ, 0, 1023, outputMin * 100, outputMax * 100) / 100.0;
+    float accelX = mapPotentiometerToAccel(rawX, 0, 1023, outputMin, outputMax);
+    float accelY = mapPotentiometerToAccel(rawY, 0, 1023, outputMin, outputMax);
+    float accelZ = mapPotentiometerToAccel(rawZ, 0, 1023, outputMin, outputMax);
 
     // Send accelerometer data to Blynk
     Blynk.virtualWrite(V2, accelX);
@@ -57,7 +55,7 @@ void handleAccelerometer()
     debugSerial.println(accelZ, 2);
 
     // Accident detection logic
-    if (abs(accelX) > accidentThreshold || abs(accelY) > accidentThreshold || abs(accelZ) > accidentThreshold)
+    if (isAccidentDetected(accelX, accelY, accelZ, accidentThreshold))
     {
         debugSerial.println("Accident detected!");
         digitalWrite(ledPin, HIGH); // Turn on LED
