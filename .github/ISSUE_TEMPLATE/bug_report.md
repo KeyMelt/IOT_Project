@@ -3,7 +3,7 @@ name: Bug report
 about: Report incorrect behavior or a build failure
 title: "[Bug] "
 labels: bug
-assignees: ''
+assignees: ""
 ---
 
 ## Description

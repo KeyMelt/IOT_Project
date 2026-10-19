@@ -1,8 +1,8 @@
 #include "../TrackerCode/accident_logic.h"
 
 #include <cassert>
-#include <math.h>
 #include <iostream>
+#include <math.h>
 
 int main() {
     assert(fabsf(mapPotentiometerToAccel(0) - (-10.0f)) < 0.01f);

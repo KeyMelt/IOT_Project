@@ -1,0 +1,18 @@
+{
+  "name": "iot-asset-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GPS asset tracker firmware for Arduino Uno (Blynk + TinyGPS++)",
+  "scripts": {
+    "test": "bash scripts/test.sh",
+    "lint": "bash scripts/lint.sh",
+    "format": "prettier --write \"**/*.{md,yml,yaml,json}\"",
+    "build:firmware": "bash scripts/build-firmware.sh"
+  },
+  "devDependencies": {
+    "prettier": "3.3.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

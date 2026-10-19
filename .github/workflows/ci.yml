@@ -7,38 +7,40 @@ on:
     branches: [main, master]
 
 jobs:
-  unit-tests:
-    name: Unit tests
+  ci:
+    name: Test, lint, and build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build and run tests
-        run: |
-          g++ -std=c++17 -Wall -Wextra -I TrackerCode tests/test_accident_logic.cpp -o test_runner
-          ./test_runner
 
-  firmware-build:
-    name: Firmware compile (PlatformIO)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Run lint and format checks
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format
+          npm run lint
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
       - name: Install PlatformIO
-        run: pip install platformio==6.1.18
+        run: pip install -r requirements.txt
+
       - name: Prepare secrets stub
         run: cp TrackerCode/secrets.h.example TrackerCode/secrets.h
-      - name: Compile for Arduino Uno
-        run: pio run -e uno
 
-  format-check:
-    name: Clang-format check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Check formatting
-        run: |
-          sudo apt-get update && sudo apt-get install -y clang-format
-          find TrackerCode tests -type f \( -name '*.h' -o -name '*.cpp' \) -print0 | \
-            xargs -0 clang-format --dry-run --Werror
+      - name: Build firmware
+        run: npm run build:firmware

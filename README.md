@@ -4,7 +4,8 @@
 [![License: MIT](https://img.shields.io/github/license/KeyMelt/IOT_Project)](LICENSE)
 [![PlatformIO](https://img.shields.io/badge/build-PlatformIO-orange)](platformio.ini)
 
-GPS-enabled IoT firmware for tracking asset location and motion, with accident detection from accelerometer readings and remote monitoring via [Blynk](https://blynk.io/).
+GPS-enabled IoT firmware for tracking asset location and motion, with accident detection from
+accelerometer readings and remote monitoring via [Blynk](https://blynk.io/).
 
 ![Asset Tracker demo](https://github.com/user-attachments/assets/2cc0cdcd-4c62-4d64-8076-6f85302a5567)
 
@@ -14,12 +15,12 @@ GPS-enabled IoT firmware for tracking asset location and motion, with accident d
 # Clone and configure Blynk credentials
 git clone https://github.com/KeyMelt/IOT_Project.git
 cd IOT_Project
+npm ci
 cp TrackerCode/secrets.h.example TrackerCode/secrets.h
 # Edit secrets.h with your Blynk template ID and auth token
 
-# Build with PlatformIO (install from https://platformio.org/)
-pio run -e uno
-
+npm test              # unit tests (no hardware)
+npm run build:firmware # PlatformIO compile
 # Or open TrackerCode/TrackerCode.ino in Arduino IDE and upload to Uno
 ```
 
@@ -36,26 +37,34 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for full setup, testing, and PR guideline
 
 ## Demo
 
-- **Live monitoring**: Configure the [Blynk](https://blynk.io/) mobile app with virtual pins V0–V5 (see [Setup Instructions](#setup-instructions)).
-- **Video walkthrough**: [Project demo recording](https://github.com/user-attachments/assets/2cc0cdcd-4c62-4d64-8076-6f85302a5567)
+- **Live monitoring**: Configure the [Blynk](https://blynk.io/) mobile app with virtual pins V0–V5
+  (see [Setup Instructions](#setup-instructions)).
+- **Video walkthrough**:
+  [Project demo recording](https://github.com/user-attachments/assets/2cc0cdcd-4c62-4d64-8076-6f85302a5567)
 
 ## Overview
 
-The **Asset Tracker** project is a GPS-enabled system for tracking the location and motion of assets (e.g., vehicles or equipment). The system includes accident detection capabilities based on accelerometer readings. The project is designed to work with the Blynk IoT platform for remote monitoring and control, providing real-time data to users.
+The **Asset Tracker** project is a GPS-enabled system for tracking the location and motion of assets
+(e.g., vehicles or equipment). The system includes accident detection capabilities based on
+accelerometer readings. The project is designed to work with the Blynk IoT platform for remote
+monitoring and control, providing real-time data to users.
 
 ---
 
 ## Features
 
 1. **GPS Tracking**:
+
    - Continuously captures and updates the latitude and longitude of the tracked asset.
    - Sends GPS data to the Blynk platform for remote monitoring.
 
 2. **Accelerometer Monitoring**:
+
    - Tracks motion along the X, Y, and Z axes using potentiometers (simulating accelerometers).
    - Sends motion data to Blynk for visualization.
 
 3. **Accident Detection**:
+
    - Detects potential accidents when accelerometer values exceed a predefined threshold.
    - Turns on an LED indicator and notifies the Blynk platform about the accident.
 
@@ -76,16 +85,16 @@ The **Asset Tracker** project is a GPS-enabled system for tracking the location 
 
 ### Pin Layout
 
-| Component               | Pin        |
-|-------------------------|------------|
-| **X-axis Potentiometer** | `A0`       |
-| **Y-axis Potentiometer** | `A1`       |
-| **Z-axis Potentiometer** | `A2`       |
-| **GPS TX**               | `3`        |
-| **GPS RX**               | `4`        |
-| **LED**                  | `9`        |
-| **Debug RX**             | `10`       |
-| **Debug TX**             | `11`       |
+| Component                | Pin  |
+| ------------------------ | ---- |
+| **X-axis Potentiometer** | `A0` |
+| **Y-axis Potentiometer** | `A1` |
+| **Z-axis Potentiometer** | `A2` |
+| **GPS TX**               | `3`  |
+| **GPS RX**               | `4`  |
+| **LED**                  | `9`  |
+| **Debug RX**             | `10` |
+| **Debug TX**             | `11` |
 
 ---
 
@@ -96,7 +105,8 @@ The **Asset Tracker** project is a GPS-enabled system for tracking the location 
 - **TinyGPS++ Library**: For parsing GPS data.
 - **SoftwareSerial Library**: For creating virtual serial ports (Arduino core).
 
-Copy `TrackerCode/secrets.h.example` to `TrackerCode/secrets.h` (or see `.env.example` for variable names). Never commit real tokens.
+Copy `TrackerCode/secrets.h.example` to `TrackerCode/secrets.h` (or see `.env.example` for variable
+names). Never commit real tokens.
 
 ---
 
@@ -122,7 +132,7 @@ pio run -e uno
 ### Run tests (no hardware)
 
 ```bash
-g++ -std=c++17 -I TrackerCode tests/test_accident_logic.cpp -o test_runner && ./test_runner
+npm test
 ```
 
 ---
@@ -130,6 +140,7 @@ g++ -std=c++17 -I TrackerCode tests/test_accident_logic.cpp -o test_runner && ./
 ## Setup Instructions
 
 1. **Install Required Libraries**:
+
    - Open the Arduino IDE.
    - Go to **Sketch** > **Include Library** > **Manage Libraries**.
    - Search for and install:
@@ -138,12 +149,14 @@ g++ -std=c++17 -I TrackerCode tests/test_accident_logic.cpp -o test_runner && ./
      - "SoftwareSerial"
 
 2. **Hardware Connections**:
+
    - Connect the GPS module to pins `3` (RX) and `4` (TX).
    - Connect the potentiometers to analog pins `A0`, `A1`, and `A2`.
    - Connect the LED to pin `9` with a resistor.
    - Connect the virtual terminal to pins `10` (RX) and `11` (TX).
 
 3. **Blynk Setup**:
+
    - Create a new project in the Blynk app.
    - Add widgets:
      - **Label or Value Display** for latitude (V0) and longitude (V1).
@@ -212,4 +225,5 @@ MIT — see [LICENSE](LICENSE).
 
 ## Acknowledgments
 
-This project is part of the university IoT course project, supervised by **Dr. Ehab Awad & Eng.Hussein**, and demonstrates practical applications of IoT, GPS, and sensor data.
+This project is part of the university IoT course project, supervised by **Dr. Ehab Awad &
+Eng.Hussein**, and demonstrates practical applications of IoT, GPS, and sensor data.

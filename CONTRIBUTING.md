@@ -1,6 +1,7 @@
 # Contributing to Asset Tracker
 
-Thank you for your interest in improving this project. This repository is an Arduino Uno firmware plus Proteus schematics for a GPS and motion-tracking IoT asset tracker.
+Thank you for your interest in improving this project. This repository is an Arduino Uno firmware
+plus Proteus schematics for a GPS and motion-tracking IoT asset tracker.
 
 ## Development setup
 
@@ -10,7 +11,8 @@ Thank you for your interest in improving this project. This repository is an Ard
 2. Install libraries via **Library Manager**:
    - Blynk
    - TinyGPS++
-3. Copy `TrackerCode/secrets.h.example` to `TrackerCode/secrets.h` and add your Blynk template ID and auth token (see `.env.example` for variable names).
+3. Copy `TrackerCode/secrets.h.example` to `TrackerCode/secrets.h` and add your Blynk template ID
+   and auth token (see `.env.example` for variable names).
 4. Open `TrackerCode/TrackerCode.ino`, select board **Arduino Uno**, and upload.
 
 ### Option B — PlatformIO (recommended for CI-parity builds)
@@ -36,22 +38,25 @@ docker run --rm asset-tracker
 Host-side unit tests cover accident-detection logic (no hardware required):
 
 ```bash
-g++ -std=c++17 -Wall -Wextra -I TrackerCode tests/test_accident_logic.cpp -o test_runner
-./test_runner
+npm ci
+npm test
+npm run lint
 ```
 
-CI runs the same tests and compiles the firmware on every push and pull request.
+CI runs `npm test`, `npm run lint`, and `npm run build:firmware` on every push and pull request.
 
 ## Pull requests
 
 1. Fork the repo and create a branch from `main`.
 2. Keep changes focused; update `README.md` if behavior or setup changes.
 3. Ensure CI passes (tests + firmware compile).
-4. Open a pull request using the template and describe how you tested (simulation, hardware, or unit tests).
+4. Open a pull request using the template and describe how you tested (simulation, hardware, or unit
+   tests).
 
 ## Reporting issues
 
-Use the GitHub issue templates for bugs and feature requests. Do **not** include Blynk auth tokens or other secrets in issues or PRs.
+Use the GitHub issue templates for bugs and feature requests. Do **not** include Blynk auth tokens
+or other secrets in issues or PRs.
 
 ## Security
 

@@ -12,8 +12,7 @@ inline float mapPotentiometerToAccel(int raw, int rawMin = 0, int rawMax = 1023,
 
 /** Returns true when any axis exceeds the accident threshold. */
 inline bool isAccidentDetected(float accelX, float accelY, float accelZ, float threshold) {
-    return fabsf(accelX) > threshold || fabsf(accelY) > threshold ||
-           fabsf(accelZ) > threshold;
+    return fabsf(accelX) > threshold || fabsf(accelY) > threshold || fabsf(accelZ) > threshold;
 }
 
 #endif
