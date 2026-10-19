@@ -2,6 +2,7 @@
 *.ino.*
 *.cpp.*
 *.h.*
+!TrackerCode/secrets.h.example
 *.elf
 *.eeprom
 *.hex
@@ -37,4 +38,11 @@ Thumbs.db
 # Environment-specific files
 *.user
 *.userprefs
+TrackerCode/secrets.h
+.env
 
+# PlatformIO
+.pio/
+.platformio/
+
+test_runner
