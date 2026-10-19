@@ -45,4 +45,7 @@ TrackerCode/secrets.h
 .pio/
 .platformio/
 
+# Node tooling
+node_modules/
+
 test_runner
