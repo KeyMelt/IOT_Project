@@ -10,7 +10,7 @@
     "build:firmware": "bash scripts/build-firmware.sh"
   },
   "devDependencies": {
-    "prettier": "3.3.3"
+    "prettier": "3.9.10"
   },
   "engines": {
     "node": ">=20"
