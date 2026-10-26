@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # Builder: install toolchains and compile firmware.
-FROM python:3.12-slim-bookworm AS builder
+FROM python:3.15-slim-bookworm AS builder
 
 WORKDIR /project
 COPY requirements.txt ./
